@@ -779,7 +779,7 @@ class DBmysql {
     **/
    public function tableExists($tablename) {
 
-      if( $_SESSION['glpi_plugins'] == [] ){
+      if( isset($_SESSION['glpi_plugins']) && $_SESSION['glpi_plugins'] == [] ){
           self::$table_exists_arr = [];
           Plugin::$is_activated_arr = [];
           Plugin::$is_installed_arr = [];
