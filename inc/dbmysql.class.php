@@ -785,9 +785,16 @@ class DBmysql {
           Plugin::$is_installed_arr = [];
       }
 
-      if( isset(self::$table_exists_arr[$tablename]) ){
-         return self::$table_exists_arr[$tablename];
+      if( isset($_POST["install"]) ||
+          !file_exists(GLPI_CONFIG_DIR . "/config_db.php") ){
+          // We are in installation mode here, so we should not
+          // rely on table_exists_arr because update scripts can rename tables or create theme !
+      } else {
+          if( isset(self::$table_exists_arr[$tablename]) ){
+             return self::$table_exists_arr[$tablename];
+          }
       }
+
       // Get a list of tables contained within the database.
       $result = $this->listTables("%$tablename%");
 
