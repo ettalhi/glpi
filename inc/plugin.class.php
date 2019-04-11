@@ -383,6 +383,14 @@ class Plugin extends CommonDBTM {
          $input['directory'] = $directory;
          if (!in_array($plugin->fields['state'], [self::ANEW, self::NOTINSTALLED])) {
             // mark it as 'updatable' unless it was not installed
+            trigger_error(
+               sprintf(
+                  'Plugin "%s" version changed. It has been deactivated as its update process has to be launched.',
+                  $directory
+               ),
+               E_USER_WARNING
+            );
+
             $input['state']     = self::NOTUPDATED;
          }
 
