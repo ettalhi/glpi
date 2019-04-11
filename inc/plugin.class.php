@@ -381,7 +381,10 @@ class Plugin extends CommonDBTM {
          $input              = $informations;
          $input['id']        = $plugin->fields['id'];
          $input['directory'] = $directory;
-         $input['state']     = self::NOTUPDATED;
+         if (!in_array($plugin->fields['state'], [self::ANEW, self::NOTINSTALLED])) {
+            // mark it as 'updatable' unless it was not installed
+            $input['state']     = self::NOTUPDATED;
+         }
 
          $this->update($input);
 
@@ -502,7 +505,6 @@ class Plugin extends CommonDBTM {
          $this->update([
             'id'      => $ID,
             'state'   => self::NOTINSTALLED,
-            'version' => ''
          ]);
          $this->setUnloadedByName($this->fields['directory']);
 
