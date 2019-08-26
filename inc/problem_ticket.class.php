@@ -272,28 +272,7 @@ class Problem_Ticket extends CommonDBRelation{
 
       $rand = mt_rand();
 
-      $iterator = $DB->request([
-         'SELECT'          => [
-            'glpi_problems_tickets.id AS linkID',
-            'glpi_tickets.*'
-         ],
-         'DISTINCT'        => true,
-         'FROM'            => 'glpi_problems_tickets',
-         'LEFT JOIN'       => [
-            'glpi_tickets' => [
-               'ON' => [
-                  'glpi_problems_tickets' => 'tickets_id',
-                  'glpi_tickets'          => 'id'
-               ]
-            ]
-         ],
-         'WHERE'           => [
-            'glpi_problems_tickets.problems_id' => $ID
-         ],
-         'ORDERBY'         => 'glpi_tickets.name'
-      ]);
-
-      $tickets = [];
+      $tickets = self::getProblemTicketsData($ID);
       $used    = [];
       $numrows = count($tickets);
       foreach ($tickets as $ticket) {
@@ -401,28 +380,7 @@ class Problem_Ticket extends CommonDBRelation{
 
       $rand = mt_rand();
 
-      $iterator = $DB->request([
-         'SELECT'          => [
-            'glpi_problems_tickets.id AS linkID',
-            'glpi_problems.*'
-         ],
-         'DISTINCT'        => true,
-         'FROM'            => 'glpi_problems_tickets',
-         'LEFT JOIN'       => [
-            'glpi_problems'   => [
-               'ON' => [
-                  'glpi_problems_tickets' => 'problems_id',
-                  'glpi_problems'         => 'id'
-               ]
-            ]
-         ],
-         'WHERE'           => [
-            'glpi_problems_tickets.tickets_id'  => $ID
-         ],
-         'ORDERBY'         => 'glpi_problems.name'
-      ]);
-
-      $problems = [];
+      $problems = self::getTicketProblemsData($ID);
       $used     = [];
       $numrows  = count($problems);
       foreach ($problems as $problem) {

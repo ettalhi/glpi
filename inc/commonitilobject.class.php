@@ -3322,7 +3322,7 @@ abstract class CommonITILObject extends CommonDBTM {
          'name'               => __('Watcher group'),
          'forcegroupby'       => true,
          'massiveaction'      => false,
-         'condition'          => ['is_requester' => 1],
+         'condition'          => ['is_watcher' => 1],
          'joinparams'         => [
             'beforejoin'         => [
                'table'              => getTableForItemType($this->grouplinkclass),
@@ -7080,6 +7080,32 @@ abstract class CommonITILObject extends CommonDBTM {
    }
 
    /**
+    * Check if input contains a flag set to prevent 'takeintoaccount' delay computation.
+    *
+    * @param array $input
+    *
+    * @return boolean
+    */
+   public function isTakeIntoAccountComputationBlocked($input) {
+      return array_key_exists('_do_not_compute_takeintoaccount', $input)
+         && $input['_do_not_compute_takeintoaccount'];
+   }
+
+
+   /**
+    * Check if input contains a flag set to prevent status computation.
+    *
+    * @param array $input
+    *
+    * @return boolean
+    */
+   public function isStatusComputationBlocked(array $input) {
+      return array_key_exists('_do_not_compute_status', $input)
+         && $input['_do_not_compute_status'];
+   }
+
+
+   /**
     * Define manually current tabs to set specific order
     *
     * @param array &$tab    Tab array passed as reference
@@ -7106,18 +7132,5 @@ abstract class CommonITILObject extends CommonDBTM {
       }
 
       return $this;
-   }
-
-   /**
-    * Check if input contains a flag set to prevent status computation.
-    *
-    * @param array $input
-    *
-    * @return boolean
-    */
-   public function isStatusComputationBlocked(array $input) {
-
-      return array_key_exists('_do_not_compute_status', $input)
-         && $input['_do_not_compute_status'];
    }
 }
